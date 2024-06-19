@@ -5,9 +5,13 @@ from http import HTTPStatus
 from django.test import TestCase
 # Импортируем функцию reverse().
 from django.urls import reverse
+from news.models import News
 
 
 class TestRoutes(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.news = News.objects.create(title='Заголовок', text='Текст')
 
     def test_home_page(self):
         # Вместо прямого указания адреса 
