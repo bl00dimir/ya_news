@@ -125,3 +125,12 @@ class TestCommentEditDelete(TestCase):
         comments_count = Comment.objects.count()
         # Ожидаем ноль комментариев в системе.
         self.assertEqual(comments_count, 0)
+
+    def test_user_cant_delete_comment_of_another_user(self):
+        # Выполняем запрос на удаление от пользователя-читателя.
+        response = self.reader_client.delete(self.delete_url)
+        # Проверяем, что вернулась 404 ошибка.
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        # Убедимся, что комментарий по-прежнему на месте.
+        comments_count = Comment.objects.count()
+        self.assertEqual(comments_count, 1)
