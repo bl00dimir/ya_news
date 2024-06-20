@@ -39,3 +39,19 @@ class TestCommentCreation(TestCase):
         comments_count = Comment.objects.count()
         # Ожидаем, что комментариев в базе нет - сравниваем с нулём.
         self.assertEqual(comments_count, 0)
+
+    def test_user_can_create_comment(self):
+        # Совершаем запрос через авторизованный клиент.
+        response = self.auth_client.post(self.url, data=self.form_data)
+        # Проверяем, что редирект привёл к разделу с комментами.
+        self.assertRedirects(response, f'{self.url}#comments')
+        # Считаем количество комментариев.
+        comments_count = Comment.objects.count()
+        # Убеждаемся, что есть один комментарий.
+        self.assertEqual(comments_count, 1)
+        # Получаем объект комментария из базы.
+        comment = Comment.objects.get()
+        # Проверяем, что все атрибуты комментария совпадают с ожидаемыми.
+        self.assertEqual(comment.text, self.COMMENT_TEXT)
+        self.assertEqual(comment.news, self.news)
+        self.assertEqual(comment.author, self.user)
