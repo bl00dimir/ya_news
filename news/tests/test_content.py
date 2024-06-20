@@ -9,5 +9,8 @@ class TestContent(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        all_news = []
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1):
-            News.objects.create(title=f'Новость {index}', text='Просто текст.')
+            news = News(title=f'Новость {index}', text='Просто текст.')
+            all_news.append(news)
+        News.objects.bulk_create(all_news)
