@@ -7,6 +7,7 @@ from django.urls import reverse
 
 # Импортируем из файла с формами список стоп-слов и предупреждение формы.
 # Загляните в news/forms.py, разберитесь с их назначением.
+
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment, News
 
