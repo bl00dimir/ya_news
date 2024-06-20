@@ -4,6 +4,7 @@ from django.test import TestCase
 # Импортируем функцию reverse(), она понадобится для получения адреса страницы.
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from news.models import Comment, News
 
@@ -65,7 +66,7 @@ class TestDetailPage(TestCase):
         cls.detail_url = reverse('news:detail', args=(cls.news.id,))
         cls.author = User.objects.create(username='Комментатор')
         # Запоминаем текущее время:
-        now = datetime.now()
+        now = now = timezone.now()
         # Создаём комментарии в цикле.
         for index in range(10):
             # Создаём объект и записываем его в переменную.
