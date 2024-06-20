@@ -73,3 +73,44 @@ class TestCommentCreation(TestCase):
         # Дополнительно убедимся, что комментарий не был создан.
         comments_count = Comment.objects.count()
         self.assertEqual(comments_count, 0)
+
+
+class TestCommentEditDelete(TestCase):
+    # Тексты для комментариев не нужно дополнительно создавать 
+    # (в отличие от объектов в БД), им не нужны ссылки на self или cls, 
+    # поэтому их можно перечислить просто в атрибутах класса.
+    COMMENT_TEXT = 'Текст комментария'
+    NEW_COMMENT_TEXT = 'Обновлённый комментарий'
+
+    @classmethod
+    def setUpTestData(cls):
+        # Создаём новость в БД.
+        cls.news = News.objects.create(title='Заголовок', text='Текст')
+        # Формируем адрес блока с комментариями,
+        # который понадобится для тестов.
+        news_url = reverse('news:detail', args=(cls.news.id,))
+        # Адрес новости.
+        cls.url_to_comments = news_url + '#comments'
+        # Адрес блока с комментариями.
+        # Создаём пользователя - автора комментария.
+        cls.author = User.objects.create(username='Автор комментария')
+        # Создаём клиент для пользователя-автора.
+        cls.author_client = Client()
+        # "Логиним" пользователя в клиенте.
+        cls.author_client.force_login(cls.author)
+        # Делаем всё то же самое для пользователя-читателя.
+        cls.reader = User.objects.create(username='Читатель')
+        cls.reader_client = Client()
+        cls.reader_client.force_login(cls.reader)
+        # Создаём объект комментария.
+        cls.comment = Comment.objects.create(
+            news=cls.news,
+            author=cls.author,
+            text=cls.COMMENT_TEXT
+        )
+        # URL для редактирования комментария.
+        cls.edit_url = reverse('news:edit', args=(cls.comment.id,))
+        # URL для удаления комментария.
+        cls.delete_url = reverse('news:delete', args=(cls.comment.id,))
+        # Формируем данные для POST-запроса по обновлению комментария.
+        cls.form_data = {'text': cls.NEW_COMMENT_TEXT}
