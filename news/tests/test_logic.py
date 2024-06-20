@@ -55,3 +55,4 @@ class TestCommentCreation(TestCase):
         self.assertEqual(comment.text, self.COMMENT_TEXT)
         self.assertEqual(comment.news, self.news)
         self.assertEqual(comment.author, self.user)
+        # comment якоря
