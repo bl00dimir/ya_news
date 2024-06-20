@@ -52,8 +52,8 @@ class TestRoutes(TestCase):
             self.client.force_login(user)
             # Для каждой пары "пользователь - ожидаемый ответ"
             # перебираем имена тестируемых страниц:
-            for name in ('news:edit', 'news:delete'):  
-                with self.subTest(user=user, name=name):        
+            for name in ('news:edit', 'news:delete'):
+                with self.subTest(user=user, name=name):
                     url = reverse(name, args=(self.comment.id,))
                     response = self.client.get(url)
                     self.assertEqual(response.status_code, status)
@@ -67,7 +67,7 @@ class TestRoutes(TestCase):
                 # Получаем адрес страницы редактирования
                 # или удаления комментария:
                 url = reverse(name, args=(self.comment.id,))
-                # Получаем ожидаемый адрес страницы логина, 
+                # Получаем ожидаемый адрес страницы логина,
                 # на который будет перенаправлен пользователь.
                 # Учитываем, что в адресе будет параметр next,
                 # в котором передаётся
@@ -76,4 +76,3 @@ class TestRoutes(TestCase):
                 response = self.client.get(url)
                 # Проверяем, что редирект приведёт именно на указанную ссылку.
                 self.assertRedirects(response, redirect_url)
-
